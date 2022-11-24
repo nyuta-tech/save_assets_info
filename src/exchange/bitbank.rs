@@ -52,6 +52,21 @@ pub async fn get_btc_price() -> TickerResponse {
     ticker_res
 }
 
+pub async fn get_eth_price() -> TickerResponse {
+    let client = Client::new();
+
+    //get btc price from bitbank API (public)
+    let path = "/eth_jpy/ticker";
+    let response = client
+        .get(PUBLIC_API.to_string() + path)
+        .send()
+        .await
+        .unwrap();
+    let body = response.text().await.unwrap();
+    let ticker_res: TickerResponse = serde_json::from_str(&body).unwrap();
+
+    ticker_res
+}
 pub async fn get_assets_info() -> AssetResponse {
     let client = Client::new();
     let api_key: String = env::var("BITBANK_API_KEY").unwrap();
